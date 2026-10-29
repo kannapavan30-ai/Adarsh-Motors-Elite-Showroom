@@ -1,0 +1,6 @@
+{
+  "name": "Adarsh Motors - Luxury Superbike Showroom",
+  "description": "Customer Showroom & Service Experience for Adarsh Motors (Hyderabad & Pan-India). Browse superbikes, book test rides, service appointments, and vehicle valuation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

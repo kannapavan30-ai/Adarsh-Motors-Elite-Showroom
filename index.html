@@ -1,0 +1,2331 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth scroll-pt-20 sm:scroll-pt-24">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <title>Adarsh Motors - Luxury Superbike Showroom</title>
+    <meta name="description" content="Customer Showroom & Service Experience for Adarsh Motors (Hyderabad & Pan-India). Browse superbikes, book test rides, service appointments, and vehicle valuation." />
+    <meta property="og:title" content="Adarsh Motors - Luxury Superbike Showroom" />
+    <meta property="og:description" content="Customer Showroom & Service Experience for Adarsh Motors (Hyderabad & Pan-India). Browse superbikes, book test rides, service appointments, and vehicle valuation." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Outfit & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Outfit', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              obsidian: {
+                DEFAULT: '#080A0F',
+                950: '#06080C',
+                900: '#080A0F',
+                850: '#0E121B',
+                800: '#141923',
+                700: '#1D2433',
+                600: '#2A3447',
+              },
+              racingRed: {
+                DEFAULT: '#DC2626',
+                hover: '#B91C1C',
+                glow: 'rgba(220, 38, 38, 0.35)',
+              },
+              motorsportGold: '#F59E0B',
+            },
+            boxShadow: {
+              'glow-red': '0 0 25px -5px rgba(220, 38, 38, 0.45)',
+              'glow-red-lg': '0 0 45px -5px rgba(220, 38, 38, 0.55)',
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Supabase JS Client v2 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+      :root {
+        --color-obsidian: #080A0F;
+        --color-crimson: #DC2626;
+        --color-gold: #F59E0B;
+      }
+      body {
+        font-family: 'Outfit', sans-serif;
+        background-color: #080A0F;
+        color: #F3F4F6;
+        overflow-x: hidden;
+      }
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #080A0F;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1D2433;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #DC2626;
+      }
+      .glass-panel {
+        background: rgba(14, 18, 27, 0.75);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .glass-card {
+        background: rgba(20, 25, 35, 0.65);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .glass-card:hover {
+        border-color: rgba(220, 38, 38, 0.4);
+      }
+      .modal-backdrop {
+        background: rgba(4, 6, 10, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      .text-balance {
+        text-wrap: balance;
+      }
+      /* Strict 4:5 image ratio container */
+      .aspect-card {
+        aspect-ratio: 4 / 5;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-obsidian-900 text-zinc-100 flex flex-col pb-24 md:pb-12 antialiased selection:bg-red-600 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-white/10 transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+        
+        <!-- Brand Lockup with Luxury Motorsport Crest Logo -->
+        <a href="#collection" class="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded-lg">
+          <div class="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-obsidian-950 border border-red-600/40 p-1 flex items-center justify-center shadow-glow-red group-hover:scale-105 group-hover:border-red-500 transition-all duration-300">
+            <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="crestGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#FF4B4B" />
+                  <stop offset="60%" stop-color="#DC2626" />
+                  <stop offset="100%" stop-color="#991B1B" />
+                </linearGradient>
+                <linearGradient id="crestGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#FDE047" />
+                  <stop offset="100%" stop-color="#D97706" />
+                </linearGradient>
+              </defs>
+              <!-- Outer Precision Motorsport Hex Shield -->
+              <polygon points="50,8 88,28 88,72 50,92 12,72 12,28" fill="#0C1019" stroke="url(#crestGrad)" stroke-width="3" />
+              <!-- Inner Speed Wings -->
+              <path d="M50 18 L76 33 L76 67 L50 82 L24 67 L24 33 Z" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+              <!-- Stylized Monogram Chevron M & A -->
+              <path d="M50 24 L70 70 L57 70 L50 54 L43 70 L30 70 Z" fill="url(#crestGrad)" />
+              <polygon points="50,38 58,56 42,56" fill="#0C1019" />
+              <circle cx="50" cy="48" r="2.5" fill="url(#crestGold)" />
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-base sm:text-xl font-black tracking-tight text-white leading-tight font-sans">
+              ADARSH <span class="text-red-500">MOTORS</span>
+            </span>
+            <span class="text-[9px] sm:text-[10px] font-bold tracking-widest text-zinc-400 uppercase">
+              Performance. Refined.
+            </span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links (Optimized Motorsport Capsule Pill) -->
+        <nav id="desktopNavbar" class="hidden md:flex items-center gap-1 lg:gap-2 px-2.5 py-1.5 rounded-full bg-obsidian-950/85 border border-white/10 shadow-inner backdrop-blur-md text-xs lg:text-sm font-semibold tracking-wide">
+          <a href="#collection" data-nav="collection" class="desktop-nav-link px-3 py-1.5 rounded-full text-white bg-red-600/20 text-red-400 border border-red-500/30 transition-all duration-200 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+            <span>Showroom</span>
+          </a>
+          <a href="#service" data-nav="service" class="desktop-nav-link px-3 py-1.5 rounded-full text-zinc-300 hover:text-white hover:bg-white/5 border border-transparent transition-all duration-200 flex items-center gap-1.5">
+            <span>Workshop & Care</span>
+          </a>
+          <a href="#sell" data-nav="sell" class="desktop-nav-link px-3 py-1.5 rounded-full text-zinc-300 hover:text-white hover:bg-white/5 border border-transparent transition-all duration-200 flex items-center gap-1.5">
+            <span>Sell / Exchange</span>
+          </a>
+          <a href="#showroom" data-nav="showroom" class="desktop-nav-link px-3 py-1.5 rounded-full text-zinc-300 hover:text-white hover:bg-white/5 border border-transparent transition-all duration-200 flex items-center gap-1.5">
+            <span>Locations</span>
+          </a>
+        </nav>
+
+        <!-- Header Actions: Call + My Garage + Mobile Toggle -->
+        <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          <a id="headerCallBtn" href="tel:+919014540489" class="inline-flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 text-white transition-all shadow-glow-red">
+            <i class="fa-solid fa-phone text-xs"></i>
+            <span class="hidden xs:inline">Call</span>
+          </a>
+
+          <button onclick="openGarageModal()" class="inline-flex items-center gap-1.5 px-2.5 py-2 sm:px-3.5 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-xl bg-obsidian-850 hover:bg-obsidian-800 active:scale-95 text-zinc-200 border border-white/10 hover:border-zinc-500 transition-all">
+            <i class="fa-solid fa-warehouse text-red-500 text-xs sm:text-sm"></i>
+            <span class="hidden sm:inline whitespace-nowrap">My Garage</span>
+            <span id="headerGarageBadge" class="hidden px-1.5 py-0.5 rounded-full bg-red-600 text-white text-[10px] font-bold">0</span>
+          </button>
+
+          <!-- Mobile Hamburger Menu Button -->
+          <button id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Toggle Navigation Menu" class="md:hidden flex items-center justify-center w-9 h-9 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 border border-white/10 hover:border-zinc-500 text-zinc-200 active:scale-95 transition">
+            <i id="mobileMenuIcon" class="fa-solid fa-bars text-sm"></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Mobile Navigation Dropdown Menu (Header Drawer) -->
+      <div id="mobileNavMenu" class="hidden md:hidden border-t border-white/10 bg-obsidian-950/98 backdrop-blur-xl px-4 py-3.5 space-y-1.5 shadow-2xl transition-all duration-300">
+        <a href="#collection" onclick="closeMobileMenu()" data-mobnav="collection" class="mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-white bg-red-600/15 border border-red-500/30 transition">
+          <span class="flex items-center gap-3">
+            <i class="fa-solid fa-motorcycle text-red-500 w-4 text-center"></i>
+            <span>Showroom Inventory</span>
+          </span>
+          <span class="text-[10px] font-mono text-red-400 bg-red-950/80 px-2 py-0.5 rounded-full border border-red-800/40">6 Machines</span>
+        </a>
+        <a href="#service" onclick="closeMobileMenu()" data-mobnav="service" class="mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 border border-transparent transition">
+          <span class="flex items-center gap-3">
+            <i class="fa-solid fa-wrench text-amber-500 w-4 text-center"></i>
+            <span>Workshop & Care</span>
+          </span>
+          <i class="fa-solid fa-chevron-right text-[10px] text-zinc-500"></i>
+        </a>
+        <a href="#sell" onclick="closeMobileMenu()" data-mobnav="sell" class="mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 border border-transparent transition">
+          <span class="flex items-center gap-3">
+            <i class="fa-solid fa-right-left text-emerald-500 w-4 text-center"></i>
+            <span>Sell / Exchange Bike</span>
+          </span>
+          <i class="fa-solid fa-chevron-right text-[10px] text-zinc-500"></i>
+        </a>
+        <a href="#showroom" onclick="closeMobileMenu()" data-mobnav="showroom" class="mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 border border-transparent transition">
+          <span class="flex items-center gap-3">
+            <i class="fa-solid fa-location-dot text-blue-500 w-4 text-center"></i>
+            <span>Showroom & Lounge Locations</span>
+          </span>
+          <i class="fa-solid fa-chevron-right text-[10px] text-zinc-500"></i>
+        </a>
+
+        <div class="grid grid-cols-2 gap-2 pt-2.5 border-t border-white/10 mt-2">
+          <a href="tel:+919014540489" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 text-white text-xs font-bold transition shadow-glow-red">
+            <i class="fa-solid fa-phone text-xs"></i>
+            <span>Call Concierge</span>
+          </a>
+          <a href="https://wa.me/919014540489?text=Hello%20Adarsh%20Motors,%20I%20would%20like%20to%20enquire%20about%20your%20superbikes" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold transition shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+            <i class="fa-brands fa-whatsapp text-sm"></i>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow">
+
+      <!-- ==========================================
+           SECTION 1: THE COLLECTION (LIVE CATALOGUE)
+           ========================================== -->
+      <section id="collection" class="pt-6 sm:pt-10 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20 sm:scroll-mt-24">
+        
+        <!-- Streamlined Header & Micro Filter Bar (Ultra-Compact) -->
+        <div class="mb-4 sm:mb-6">
+          <div class="flex items-center justify-between gap-3 mb-2.5">
+            <div class="flex items-center gap-2">
+              <h1 class="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-white font-sans uppercase">
+                THE <span class="text-red-600">COLLECTION</span>
+              </h1>
+              <span class="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-950/60 border border-red-800/40 text-[10px] font-bold text-red-400 uppercase tracking-wider">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                Ready to Ride
+              </span>
+            </div>
+
+            <!-- Total Available count badge -->
+            <div class="flex items-center gap-1.5 text-[11px] font-mono text-zinc-400 shrink-0">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span class="text-white font-bold"><span id="statStockNumber">6</span> Machines</span>
+              <span id="viewingLabel" class="hidden">All vehicles</span>
+            </div>
+          </div>
+
+          <!-- Ultra-Compact Category & Brand Micro Bar (Height ~34px) -->
+          <div class="flex items-center justify-between gap-1.5 sm:gap-2 bg-obsidian-950/90 p-1 rounded-xl border border-white/10 backdrop-blur-md">
+            <!-- Micro Category Pills (Horizontal scrolling track) -->
+            <div class="flex items-center gap-1 overflow-x-auto scrollbar-none py-0.5 flex-1 min-w-0" id="categoryButtonsContainer">
+              <button onclick="setCategoryFilter('all')" data-cat="all" class="cat-btn px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap bg-red-600 text-white shadow-glow-red shrink-0">
+                All (<span id="statTotalNumber">6</span>)
+              </button>
+              <button onclick="setCategoryFilter('Superbikes')" data-cat="Superbikes" class="cat-btn px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all whitespace-nowrap bg-transparent text-zinc-400 hover:text-white hover:bg-white/5 shrink-0">
+                Superbikes
+              </button>
+              <button onclick="setCategoryFilter('Mid-Range')" data-cat="Mid-Range" class="cat-btn px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all whitespace-nowrap bg-transparent text-zinc-400 hover:text-white hover:bg-white/5 shrink-0">
+                Mid-Range
+              </button>
+              <button onclick="setCategoryFilter('Scooters')" data-cat="Scooters" class="cat-btn px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all whitespace-nowrap bg-transparent text-zinc-400 hover:text-white hover:bg-white/5 shrink-0">
+                Scooters
+              </button>
+              <button onclick="setCategoryFilter('Accessories')" data-cat="Accessories" class="cat-btn px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all whitespace-nowrap bg-transparent text-zinc-400 hover:text-white hover:bg-white/5 shrink-0">
+                Accessories
+              </button>
+            </div>
+
+            <!-- Compact Brand Dropdown (Micro-pill style) -->
+            <div class="relative shrink-0">
+              <select id="brandFilterSelect" onchange="applyFilters()" class="bg-obsidian-850 hover:bg-obsidian-800 text-zinc-200 pl-2.5 pr-6 py-1 rounded-lg border border-white/10 text-[11px] font-medium focus:outline-none focus:border-red-500 transition appearance-none cursor-pointer">
+                <option value="all">All Brands</option>
+                <option value="Kawasaki">Kawasaki</option>
+                <option value="BMW">BMW</option>
+                <option value="Ducati">Ducati</option>
+                <option value="KTM">KTM</option>
+                <option value="Honda">Honda</option>
+                <option value="Royal Enfield">Royal Enfield</option>
+                <option value="Dainese">Dainese</option>
+              </select>
+              <div class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none text-zinc-400 text-[9px]">
+                <i class="fa-solid fa-chevron-down"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BIKES CARDS GRID: STRICT 2-column grid on mobile (<768px), 4-column on desktop (>=1024px) -->
+        <div id="bikeCatalogueGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+          <!-- Dynamically populated via Supabase / local fallback -->
+        </div>
+
+        <!-- Empty State if no results match filter -->
+        <div id="emptyCatalogueState" class="hidden text-center py-16 px-4 glass-card rounded-2xl border border-white/10">
+          <div class="w-16 h-16 rounded-2xl bg-obsidian-800 flex items-center justify-center text-red-500 mx-auto mb-4 text-2xl border border-white/5">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-1">No Machines Found</h3>
+          <p class="text-xs sm:text-sm text-zinc-400 max-w-sm mx-auto mb-5">
+            We couldn't find any vehicle matching your current filters. Try resetting the category or brand.
+          </p>
+          <button onclick="resetFilters()" class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold text-xs transition">
+            Reset Filters
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           SECTION 2: BOOK A SERVICE APPOINTMENT
+           ========================================== -->
+      <section id="service" class="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/5 scroll-mt-20 sm:scroll-mt-24">
+        
+        <div class="mb-6 sm:mb-8">
+          <div class="text-xs font-bold text-red-500 tracking-wider uppercase mb-1">
+            WORKSHOP · CARE · CONFIDENCE
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight font-sans">
+            BOOK A <span class="text-red-600">SERVICE APPOINTMENT.</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-zinc-400 max-w-xl text-balance mt-1">
+            Choose the service your two-wheeler needs and request an appointment with our team of factory-certified technicians.
+          </p>
+        </div>
+
+        <!-- Interactive Service Booking Card (Image 6) -->
+        <div onclick="openServiceModal()" class="glass-card rounded-2xl p-4 sm:p-5 mb-8 border border-white/10 hover:border-red-600/50 cursor-pointer transition-all duration-300 group flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3.5 sm:gap-4">
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-red-600/15 border border-red-600/30 flex items-center justify-center text-red-500 shrink-0 group-hover:scale-105 transition-transform">
+              <i class="fa-solid fa-wrench text-lg"></i>
+            </div>
+            <div>
+              <div class="text-sm sm:text-base font-bold text-white group-hover:text-red-400 transition-colors">
+                Book a service appointment
+              </div>
+              <div class="text-xs text-zinc-400">
+                Choose a date and share your bike details in a short form.
+              </div>
+            </div>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-obsidian-800 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:bg-red-600 transition-all shrink-0">
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </div>
+        </div>
+
+
+        <!-- 3 Service Feature Cards (Image 6) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          <!-- Card 1: Scheduled Servicing -->
+          <div class="glass-card rounded-2xl p-5 border border-white/5 hover:border-red-600/30 transition-all">
+            <div class="w-10 h-10 rounded-xl bg-red-600/10 border border-red-600/20 flex items-center justify-center text-red-500 mb-3.5">
+              <i class="fa-solid fa-screwdriver-wrench"></i>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-white mb-1.5 uppercase tracking-wide">
+              Scheduled Servicing
+            </h4>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              Routine maintenance with clear communication, genuine OEM spares, and uncompromising attention to detail.
+            </p>
+          </div>
+
+          <!-- Card 2: Inspection & Diagnostics -->
+          <div class="glass-card rounded-2xl p-5 border border-white/5 hover:border-red-600/30 transition-all">
+            <div class="w-10 h-10 rounded-xl bg-red-600/10 border border-red-600/20 flex items-center justify-center text-red-500 mb-3.5">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-white mb-1.5 uppercase tracking-wide">
+              Inspection & Diagnostics
+            </h4>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              A considered multi-point check before a track weekend, long tour, or pre-owned evaluation with live OBD scan reports.
+            </p>
+          </div>
+
+          <!-- Card 3: Detailing & Finish -->
+          <div class="glass-card rounded-2xl p-5 border border-white/5 hover:border-red-600/30 transition-all">
+            <div class="w-10 h-10 rounded-xl bg-red-600/10 border border-red-600/20 flex items-center justify-center text-red-500 mb-3.5">
+              <i class="fa-solid fa-spray-can-sparkles"></i>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-white mb-1.5 uppercase tracking-wide">
+              Detailing & Finish
+            </h4>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              Help your machine look razor sharp with ceramic coat protection, titanium exhaust polishing, and hydrophobics.
+            </p>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           SECTION 3: SELL YOUR BIKE (SWAP UP)
+           ========================================== -->
+      <section id="sell" class="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/5 scroll-mt-20 sm:scroll-mt-24">
+        
+        <div class="max-w-3xl">
+          
+          <div class="text-xs font-bold text-red-500 tracking-wider uppercase mb-1">
+            SIMPLE & FAST VALUATION
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight font-sans mb-3">
+            SELL YOUR BIKE OR <span class="text-red-600">GET EXCHANGE VALUE.</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-zinc-400 mb-5 max-w-xl leading-relaxed text-balance">
+            Want to sell your bike or get an exchange value for your current two-wheeler? Share your bike details and upload photos of its current condition. Our team will review them quickly and give you the best price.
+          </p>
+
+          <ul class="space-y-2.5 mb-6 text-xs sm:text-sm text-zinc-300">
+            <li class="flex items-center gap-2.5">
+              <i class="fa-solid fa-check text-red-500 text-xs"></i>
+              <span>Free price check and valuation within 60 minutes</span>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i class="fa-solid fa-check text-red-500 text-xs"></i>
+              <span>Simple paperwork with showroom or doorstep bike inspection</span>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i class="fa-solid fa-check text-red-500 text-xs"></i>
+              <span>Instant bank payment or direct discount on exchange</span>
+            </li>
+          </ul>
+
+          <!-- Interactive Valuation CTA -->
+          <div onclick="openSellModal()" class="glass-card rounded-2xl p-4 sm:p-5 border border-white/10 hover:border-red-600/50 cursor-pointer transition-all duration-300 group flex items-center justify-between gap-4 max-w-xl">
+            <div class="flex items-center gap-3.5">
+              <div class="w-11 h-11 rounded-xl bg-red-600/15 border border-red-600/30 flex items-center justify-center text-red-500 shrink-0 group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-right-left text-lg"></i>
+              </div>
+              <div>
+                <div class="text-sm sm:text-base font-bold text-white group-hover:text-red-400 transition-colors">
+                  Sell Your Bike or Get Exchange Value
+                </div>
+                <div class="text-xs text-zinc-400">
+                  Enter your bike details and upload photos of its current condition.
+                </div>
+              </div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-obsidian-800 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:bg-red-600 transition-all shrink-0">
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           SECTION 4: FOLLOW THE GARAGE (INSTAGRAM)
+           ========================================== -->
+      <section class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/5">
+        <div class="text-center max-w-xl mx-auto mb-6">
+          <div class="text-xs font-bold text-red-500 tracking-wider uppercase mb-1">
+            FRESH ARRIVALS · REAL MACHINES
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight font-sans">
+            FOLLOW THE <span class="text-red-600">GARAGE.</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-zinc-400 mt-1">
+            Follow our latest arrivals, exhaust sound clips, walkarounds and showroom delivery moments.
+          </p>
+        </div>
+
+        <div class="flex justify-center mb-8">
+          <a id="instagramLink" href="https://instagram.com/adarshmotors.in" target="_blank" rel="noopener noreferrer" class="glass-card hover:bg-obsidian-750 px-5 py-2.5 rounded-xl border border-white/10 hover:border-red-600/50 text-white font-semibold text-xs sm:text-sm flex items-center gap-2.5 transition group shadow-sm">
+            <i class="fa-brands fa-instagram text-red-500 text-base group-hover:scale-110 transition-transform"></i>
+            <span>@adarshmotors.in</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-zinc-400"></i>
+          </a>
+        </div>
+
+        <!-- Social Proof Grid: 4 cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+          <div class="glass-card rounded-2xl overflow-hidden border border-white/5 group">
+            <div class="aspect-square bg-zinc-950 relative overflow-hidden">
+              <img src="/assets/aistudio/image_5a6010cd.png" alt="KTM Super Duke 1290" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80" loading="lazy" referrerPolicy="no-referrer" />
+              <div class="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-transparent to-transparent flex items-end p-3">
+                <span class="text-[11px] font-bold text-white flex items-center gap-1.5"><i class="fa-solid fa-play text-red-500 text-[10px]"></i> Cold Start & Dyno Run</span>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card rounded-2xl overflow-hidden border border-white/5 group">
+            <div class="aspect-square bg-zinc-950 relative overflow-hidden">
+              <img src="/assets/aistudio/image_f406ab38.png" alt="Ducati Diavel V4" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80" loading="lazy" referrerPolicy="no-referrer" />
+              <div class="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-transparent to-transparent flex items-end p-3">
+                <span class="text-[11px] font-bold text-white flex items-center gap-1.5"><i class="fa-solid fa-check-circle text-red-500 text-[10px]"></i> Handover to Client TS-09</span>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card rounded-2xl overflow-hidden border border-white/5 group">
+            <div class="aspect-square bg-zinc-950 relative overflow-hidden">
+              <img src="/assets/aistudio/image_f4045ab9.png" alt="Adarsh Motors Track Day" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80" loading="lazy" referrerPolicy="no-referrer" />
+              <div class="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-transparent to-transparent flex items-end p-3">
+                <span class="text-[11px] font-bold text-white flex items-center gap-1.5"><i class="fa-solid fa-flag-checkered text-red-500 text-[10px]"></i> BIC Track Sunday</span>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card rounded-2xl overflow-hidden border border-white/5 group flex flex-col justify-center items-center p-6 text-center bg-gradient-to-br from-obsidian-850 to-obsidian-900">
+            <i class="fa-brands fa-instagram text-3xl text-red-500 mb-2"></i>
+            <span class="text-xs font-bold text-white mb-1">Join the 18K+ Brotherhood</span>
+            <span class="text-[11px] text-zinc-400 mb-3">Tag #AdarshMotors to get featured</span>
+            <a href="https://instagram.com/adarshmotors.in" target="_blank" rel="noopener noreferrer" class="text-[11px] text-red-400 font-semibold underline underline-offset-4">
+              View Instagram Profile
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           SECTION 5: THE SHOWROOM & BRANCHES
+           ========================================== -->
+      <section id="showroom" class="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/5 scroll-mt-20 sm:scroll-mt-24">
+        
+        <div class="mb-6 sm:mb-8 text-center max-w-2xl mx-auto">
+          <div class="text-xs font-bold text-red-500 tracking-wider uppercase mb-1">
+            THE SHOWROOM & PAN-INDIA NETWORK
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight font-sans">
+            MEET US IN <span class="text-red-600">HYDERABAD.</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-zinc-400 mt-1">
+            Experience our machines in an exclusive climate-controlled motorsport lounge. Walk-ins and private appointments welcome 7 days a week.
+          </p>
+        </div>
+
+        <!-- Branch Selector Tabs -->
+        <div class="flex items-center justify-center gap-2 overflow-x-auto pb-2 mb-6" id="branchTabsContainer">
+          <!-- Populated from Supabase 'branches' table or local fallback -->
+        </div>
+
+        <!-- Active Branch Card -->
+        <div id="activeBranchCard" class="glass-panel rounded-3xl p-6 sm:p-8 max-w-3xl mx-auto border border-white/10 shadow-2xl">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="w-12 h-12 rounded-2xl bg-red-600/15 border border-red-600/30 flex items-center justify-center text-red-500 shrink-0 text-xl">
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div>
+              <div class="text-xs font-mono font-bold text-red-400 uppercase tracking-wider mb-0.5">
+                Visit the Showroom
+              </div>
+              <h3 id="branchName" class="text-xl sm:text-2xl font-black text-white">
+                Hyderabad – Main Superbike Showroom
+              </h3>
+              <p id="branchAddress" class="text-xs sm:text-sm text-zinc-300 mt-1 leading-relaxed">
+                Plot 48, Road No. 36, Jubilee Hills, Hyderabad, Telangana 500033
+              </p>
+              <div id="branchTimings" class="text-xs text-zinc-400 mt-2 flex items-center gap-2">
+                <i class="fa-regular fa-clock text-red-400"></i>
+                <span>Mon – Sun: 10:00 AM – 8:30 PM (Air-conditioned valet lounge)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Showroom Action Buttons (Image 6) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-white/10">
+            <a id="branchMapsBtn" href="https://maps.google.com/?q=Adarsh+Motors+Jubilee+Hills+Hyderabad" target="_blank" rel="noopener noreferrer" class="py-3 px-4 rounded-xl bg-obsidian-800 hover:bg-obsidian-750 border border-white/10 text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition">
+              <i class="fa-solid fa-map-location-dot text-red-500"></i>
+              <span>Open Google Maps</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-zinc-400"></i>
+            </a>
+
+            <a id="branchCallBtn" href="tel:+919014540489" class="py-3 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition shadow-glow-red">
+              <i class="fa-solid fa-phone"></i>
+              <span>Call Showroom Manager</span>
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="glass-panel border-t border-white/10 mt-12 py-10 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        
+        <div class="flex flex-col items-center md:items-start text-center md:text-left">
+          <div class="flex items-center gap-2.5 mb-2">
+            <div class="w-8 h-8 rounded-lg bg-obsidian-950 border border-red-500/30 p-0.5 flex items-center justify-center shadow-glow-red">
+              <img 
+                src="/assets/adarsh-logo-128.png" 
+                alt="Adarsh Motors" 
+                class="w-full h-full object-contain"
+                onerror="this.onerror=null; this.src='/assets/adarsh-logo.png';"
+              />
+            </div>
+            <span class="text-lg font-black text-white tracking-tight">ADARSH <span class="text-red-500">MOTORS</span></span>
+          </div>
+          <p class="text-xs text-zinc-400 max-w-md">
+            Performance. Refined. · Hyderabad & Pan-India Network.<br />
+            Customer enquiries and records use Supabase when configured, with this browser's localStorage as a demo fallback. Confirm business contact numbers, inventory, pricing and backend access policies before launch.
+          </p>
+        </div>
+
+        <div class="flex flex-col items-center md:items-end gap-3 text-xs text-zinc-400">
+          <div class="flex items-center gap-4">
+            <a href="tel:+919014540489" class="hover:text-white transition flex items-center gap-1.5">
+              <i class="fa-solid fa-phone text-red-500"></i> +91 9014540489
+            </a>
+            <span class="text-zinc-600">·</span>
+            <a href="https://wa.me/919014540489" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition flex items-center gap-1.5">
+              <i class="fa-brands fa-whatsapp text-emerald-500"></i> WhatsApp
+            </a>
+            <span class="text-zinc-600">·</span>
+            <a href="https://instagram.com/adarshmotors.in" target="_blank" rel="noopener noreferrer" class="hover:text-pink-400 transition flex items-center gap-1.5">
+              <i class="fa-brands fa-instagram text-pink-500"></i> Instagram
+            </a>
+          </div>
+          <div class="text-zinc-400 text-[11px]">
+            &copy; <span id="currentYear"></span> Adarsh Motors. All rights reserved. · <span class="text-red-400 font-semibold">Designed for Speed</span>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+
+    <!-- ==========================================
+         BOTTOM FIXED NAVIGATION BAR (MOBILE)
+         ========================================== -->
+    <nav id="mobileBottomNav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 glass-panel border-t border-white/10 px-2 pt-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] flex items-center justify-around h-16 shadow-2xl">
+      <a href="#collection" data-botnav="collection" class="bot-nav-item flex flex-col items-center justify-center text-red-500 py-1 px-2.5 transition-colors">
+        <i class="fa-solid fa-motorcycle text-base"></i>
+        <span class="text-[10px] font-bold mt-0.5">Showroom</span>
+      </a>
+      <a href="#service" data-botnav="service" class="bot-nav-item flex flex-col items-center justify-center text-zinc-400 hover:text-white py-1 px-2.5 transition-colors">
+        <i class="fa-solid fa-wrench text-base"></i>
+        <span class="text-[10px] font-medium mt-0.5">Workshop</span>
+      </a>
+      <a href="#sell" data-botnav="sell" class="bot-nav-item flex flex-col items-center justify-center text-zinc-400 hover:text-white py-1 px-2.5 transition-colors">
+        <i class="fa-solid fa-right-left text-base"></i>
+        <span class="text-[10px] font-medium mt-0.5">Sell / Swap</span>
+      </a>
+      <a href="#showroom" data-botnav="showroom" class="bot-nav-item flex flex-col items-center justify-center text-zinc-400 hover:text-white py-1 px-2.5 transition-colors">
+        <i class="fa-solid fa-location-dot text-base"></i>
+        <span class="text-[10px] font-medium mt-0.5">Locations</span>
+      </a>
+      <button onclick="openGarageModal()" class="bot-nav-item relative flex flex-col items-center justify-center text-zinc-400 hover:text-white py-1 px-2.5 transition-colors">
+        <i class="fa-solid fa-warehouse text-base"></i>
+        <span class="text-[10px] font-medium mt-0.5">Garage</span>
+        <span id="mobileGarageBadge" class="hidden absolute top-0.5 right-1.5 w-4 h-4 rounded-full bg-red-600 text-white text-[9px] font-bold flex items-center justify-center">0</span>
+      </button>
+    </nav>
+
+    <!-- ==========================================
+         MODAL 1: BIKE DETAILS MODAL (IMAGES 1 & 2 SPEC)
+         Ultra-luxurious showcase with technical spec badges
+         ========================================== -->
+    <!-- ==========================================
+         MODAL 1: BIKE DETAILS MODAL
+         80-100% screen layout, clear specs, mobile back button
+         ========================================== -->
+    <div id="bikeDetailsModal" class="fixed inset-0 z-50 hidden overflow-y-auto modal-backdrop flex items-center justify-center p-0 sm:p-4 md:p-6 transition-all duration-300">
+      <div class="relative w-full h-full sm:h-auto sm:max-h-[92vh] sm:w-[94vw] md:w-[88vw] lg:w-[82vw] xl:max-w-6xl bg-obsidian-950 border-0 sm:border sm:border-white/15 rounded-none sm:rounded-3xl overflow-y-auto shadow-2xl my-auto animate-in fade-in zoom-in-95 duration-200 flex flex-col">
+        
+        <!-- Mobile Sticky Top Back Bar (100% Mobile screen optimization) -->
+        <div class="sm:hidden sticky top-0 z-30 bg-obsidian-950/95 backdrop-blur-md px-4 py-2.5 border-b border-white/10 flex items-center justify-between">
+          <button onclick="closeBikeModal()" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-obsidian-850 hover:bg-obsidian-800 px-3 py-1.5 rounded-lg border border-white/10 active:scale-95 transition">
+            <i class="fa-solid fa-arrow-left text-red-500"></i>
+            <span>Back to Showroom</span>
+          </button>
+          <span class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Adarsh Motors</span>
+        </div>
+
+        <!-- Modal Top Bar -->
+        <div class="p-4 sm:p-6 border-b border-white/10 flex items-start justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span id="modalCategoryBadge" class="text-[10px] font-bold uppercase tracking-wider text-red-400 bg-red-950/60 border border-red-800/40 px-2 py-0.5 rounded">Superbike</span>
+              <span id="modalStockBadge" class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 rounded">Verified Stock</span>
+            </div>
+            <h2 id="modalBikeTitle" class="text-xl sm:text-3xl font-black text-white tracking-tight">
+              Super Duke 1290 <span class="text-red-500">KTM</span>
+            </h2>
+            <p id="modalBikeTagline" class="text-xs sm:text-sm text-zinc-400">
+              The ultimate hyper-naked machine.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="text-right">
+              <div id="modalBikePrice" class="text-xl sm:text-3xl font-black text-white font-mono tabular-nums">
+                ₹18,50,000
+              </div>
+              <div class="text-[10px] sm:text-xs text-zinc-400 uppercase font-semibold">
+                Offer Price · Negotiable
+              </div>
+            </div>
+            <button onclick="closeBikeModal()" class="hidden sm:flex w-9 h-9 rounded-full bg-obsidian-800 hover:bg-obsidian-750 text-zinc-400 hover:text-white items-center justify-center text-sm transition">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Center Stage: Staged Machine Showcase -->
+        <div class="relative bg-gradient-to-b from-obsidian-900 to-obsidian-950 p-4 sm:p-8 flex flex-col items-center justify-center min-h-[240px] sm:min-h-[320px] overflow-hidden">
+          
+          <!-- Subtle Glow Backdrop -->
+          <div id="modalGlowBackdrop" class="absolute w-96 h-48 bg-red-600/15 rounded-full blur-3xl pointer-events-none"></div>
+
+          <!-- Staged Bike Image -->
+          <div class="relative w-full max-w-xl aspect-[16/10] flex items-center justify-center z-10">
+            <img 
+              id="modalBikeImage" 
+              src="/assets/aistudio/image_5a6010cd.png" 
+              alt="Bike Showcase" 
+              class="w-full h-full object-contain filter drop-shadow-[0_20px_25px_rgba(0,0,0,0.8)] transition-all duration-300"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+
+          <!-- Angle / Image switcher controls -->
+          <div class="flex items-center gap-3 mt-3 z-10">
+            <button onclick="prevBikePhoto()" class="w-8 h-8 rounded-full bg-obsidian-850 hover:bg-obsidian-800 border border-white/10 text-white flex items-center justify-center text-xs transition active:scale-95">
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <span id="photoAngleIndicator" class="text-xs text-zinc-400 font-mono">Angle 1 of 3</span>
+            <button onclick="nextBikePhoto()" class="w-8 h-8 rounded-full bg-obsidian-850 hover:bg-obsidian-800 border border-white/10 text-white flex items-center justify-center text-xs transition active:scale-95">
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Sleek Technical Spec Badges Grid (Fuel, Year, HP, KM, 0-100, Engine) -->
+        <div class="p-3 sm:p-6 bg-obsidian-900 border-t border-b border-white/10">
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
+            
+            <!-- Spec 1: Fuel -->
+            <div class="bg-obsidian-850/90 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
+              <i class="fa-solid fa-gas-pump text-red-500 text-xs sm:text-sm mb-1"></i>
+              <span id="specFuel" class="text-xs sm:text-sm font-bold text-white">Petrol</span>
+              <span class="text-[9px] sm:text-[10px] text-zinc-400">Fuel Type</span>
+            </div>
+
+            <!-- Spec 2: Year -->
+            <div class="bg-obsidian-850/90 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
+              <i class="fa-regular fa-calendar text-red-500 text-xs sm:text-sm mb-1"></i>
+              <span id="specYear" class="text-xs sm:text-sm font-bold text-white font-mono">2024</span>
+              <span class="text-[9px] sm:text-[10px] text-zinc-400">Model Year</span>
+            </div>
+
+            <!-- Spec 3: HP / Power -->
+            <div class="bg-obsidian-850/90 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
+              <i class="fa-solid fa-gauge-high text-red-500 text-xs sm:text-sm mb-1"></i>
+              <span id="specHP" class="text-xs sm:text-sm font-bold text-white font-mono">180 hp</span>
+              <span class="text-[9px] sm:text-[10px] text-zinc-400">Max Power</span>
+            </div>
+
+            <!-- Spec 4: KM / Odometer -->
+            <div class="bg-obsidian-850/90 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
+              <i class="fa-solid fa-road text-red-500 text-xs sm:text-sm mb-1"></i>
+              <span id="specKM" class="text-xs sm:text-sm font-bold text-white font-mono">1,845 km</span>
+              <span class="text-[9px] sm:text-[10px] text-zinc-400">Odometer</span>
+            </div>
+
+            <!-- Spec 5: 0-100 km/h -->
+            <div class="bg-obsidian-850/90 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
+              <i class="fa-solid fa-stopwatch text-red-500 text-xs sm:text-sm mb-1"></i>
+              <span id="specAcceleration" class="text-xs sm:text-sm font-bold text-white font-mono">3.1s</span>
+              <span class="text-[9px] sm:text-[10px] text-zinc-400">0-100 km/h</span>
+            </div>
+
+            <!-- Spec 6: Engine Displ. -->
+            <div class="bg-obsidian-850/90 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
+              <i class="fa-solid fa-gears text-red-500 text-xs sm:text-sm mb-1"></i>
+              <span id="specEngine" class="text-xs sm:text-sm font-bold text-white font-mono truncate max-w-full">1301 cc</span>
+              <span class="text-[9px] sm:text-[10px] text-zinc-400">Engine Spec</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Vehicle Inspection, Warranty & Assurances (Clearly Visible Details) -->
+        <div class="p-4 sm:p-6 bg-obsidian-950 grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+          
+          <div class="bg-obsidian-850/80 p-3.5 sm:p-4 rounded-2xl border border-white/5 flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0 text-base">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+              <div class="text-xs sm:text-sm font-bold text-white">120-Point Multi-Check</div>
+              <p class="text-[11px] text-zinc-400 mt-0.5 leading-relaxed">
+                Engine compression, transmission, electricals, and frame geometry physically inspected & certified.
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-obsidian-850/80 p-3.5 sm:p-4 rounded-2xl border border-white/5 flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-red-600/10 border border-red-600/20 flex items-center justify-center text-red-500 shrink-0 text-base">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+              <div class="text-xs sm:text-sm font-bold text-white">1-Year Engine Warranty</div>
+              <p class="text-[11px] text-zinc-400 mt-0.5 leading-relaxed">
+                Comprehensive pan-India mechanical warranty with 24/7 roadside assistance support.
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-obsidian-850/80 p-3.5 sm:p-4 rounded-2xl border border-white/5 flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0 text-base">
+              <i class="fa-solid fa-file-contract"></i>
+            </div>
+            <div>
+              <div class="text-xs sm:text-sm font-bold text-white">Verified Ownership Title</div>
+              <p class="text-[11px] text-zinc-400 mt-0.5 leading-relaxed">
+                Clean single-owner history, genuine service logs, valid insurance, NOC & complete RTO transfer.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Modal Action Footer: WhatsApp & Test Ride -->
+        <div class="p-4 sm:p-6 bg-obsidian-900 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 mt-auto">
+          <div class="text-xs text-zinc-400 text-center sm:text-left flex items-center gap-2">
+            <i class="fa-solid fa-location-dot text-red-500 text-sm"></i>
+            <span>Ready for physical walkaround, inspection & immediate delivery.</span>
+          </div>
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <button onclick="openTestRideModalFromDetails()" class="flex-1 sm:flex-none px-5 py-3 rounded-xl bg-obsidian-800 hover:bg-obsidian-750 text-white font-semibold text-xs sm:text-sm border border-white/10 transition flex items-center justify-center gap-1.5 active:scale-95">
+              <i class="fa-solid fa-flag-checkered text-red-500"></i>
+              <span>Book Test Ride</span>
+            </button>
+            <button onclick="enquireCurrentBikeWhatsApp()" class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(16,185,129,0.35)] flex items-center justify-center gap-2 transition">
+              <i class="fa-brands fa-whatsapp text-lg"></i>
+              <span>Enquire on WhatsApp</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL 2: SERVICE APPOINTMENT FORM MODAL
+         ========================================== -->
+    <div id="serviceAppointmentModal" class="fixed inset-0 z-50 hidden overflow-y-auto modal-backdrop flex items-center justify-center p-3 sm:p-6">
+      <div class="relative w-full max-w-xl bg-obsidian-950 border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl my-auto animate-in fade-in zoom-in-95 duration-200">
+        
+        <div class="flex items-start justify-between gap-4 mb-5">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-red-400">Adarsh Precision Workshop</span>
+            <h3 class="text-2xl font-black text-white tracking-tight">Book Service Appointment</h3>
+            <p class="text-xs text-zinc-400">Share your machine details and schedule a priority bay slot.</p>
+          </div>
+          <button onclick="closeServiceModal()" class="w-8 h-8 rounded-full bg-obsidian-800 text-zinc-400 hover:text-white flex items-center justify-center transition">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form id="serviceForm" onsubmit="handleServiceSubmit(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Full Name *</label>
+            <input type="text" id="srvName" required placeholder="Enter your full name" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Mobile Number (WhatsApp) *</label>
+              <input type="tel" id="srvPhone" required pattern="[0-9]{10}" placeholder="10-digit mobile" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Two-Wheeler Model *</label>
+              <input type="text" id="srvBike" required placeholder="e.g. Kawasaki Z900 / Activa" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Service Type *</label>
+              <select id="srvType" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500 cursor-pointer">
+                <option value="Scheduled Servicing">Scheduled Servicing (Periodic)</option>
+                <option value="Inspection & Diagnostics">Inspection & Diagnostics</option>
+                <option value="Detailing & Ceramic Finish">Detailing & Ceramic Coating</option>
+                <option value="Track Pre-Check & Dyno Tuning">Track Pre-Check & Dyno Tuning</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Preferred Date *</label>
+              <input type="date" id="srvDate" required class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Select Workshop Branch *</label>
+            <select id="srvBranch" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500 cursor-pointer">
+              <option value="Hyderabad - Jubilee Hills Main">Hyderabad – Jubilee Hills Main Workshop</option>
+              <option value="Hyderabad - Banjara Hills Lounge">Hyderabad – Banjara Hills Superbike Bay</option>
+              <option value="Bengaluru - Indiranagar">Bengaluru – Indiranagar Workshop</option>
+              <option value="Mumbai - Andheri West">Mumbai – Andheri West Service Hub</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Specific Requests or Notes (Optional)</label>
+            <textarea id="srvNotes" rows="2" placeholder="e.g. Chain lubrication, brake pad check, oil upgrade..." class="w-full bg-obsidian-850 text-white px-4 py-2.5 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500"></textarea>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold text-xs sm:text-sm tracking-wider uppercase transition shadow-glow-red flex items-center justify-center gap-2">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>Confirm Service Booking & WhatsApp Dispatch</span>
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL 3: SELL YOUR BIKE OR GET EXCHANGE VALUE MODAL
+         ========================================== -->
+    <div id="sellModal" class="fixed inset-0 z-50 hidden overflow-y-auto modal-backdrop flex items-center justify-center p-3 sm:p-6">
+      <div class="relative w-full max-w-xl bg-obsidian-950 border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl my-auto animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] overflow-y-auto">
+        
+        <div class="flex items-start justify-between gap-4 mb-5">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-red-400">Adarsh Motors Valuation</span>
+            <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">Sell Your Bike or Get Exchange Value</h3>
+            <p class="text-xs text-zinc-400 mt-0.5">Share your bike details and photos of its current condition for quick valuation.</p>
+          </div>
+          <button onclick="closeSellModal()" class="w-8 h-8 rounded-full bg-obsidian-800 text-zinc-400 hover:text-white flex items-center justify-center transition shrink-0">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form id="sellForm" onsubmit="handleSellSubmit(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Your Name *</label>
+              <input type="text" id="sellName" required placeholder="Owner name" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Mobile Number (WhatsApp) *</label>
+              <input type="tel" id="sellPhone" required pattern="[0-9]{10}" placeholder="10-digit mobile number" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Make & Model *</label>
+              <input type="text" id="sellBikeModel" required placeholder="e.g. Royal Enfield / Z900" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Year of Reg. *</label>
+              <input type="number" id="sellYear" required min="2000" max="2026" placeholder="e.g. 2022" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Total KM *</label>
+              <input type="number" id="sellKM" required placeholder="e.g. 8500" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Expected Price (₹ INR) *</label>
+              <input type="text" id="sellExpectedPrice" required placeholder="e.g. ₹4,50,000" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Current Vehicle Condition *</label>
+              <select id="sellCurrentCondition" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500 cursor-pointer">
+                <option value="Excellent (Like New / Mint)">Excellent (Like New / Mint)</option>
+                <option value="Very Good (Clean / Well maintained)" selected>Very Good (Clean / Well maintained)</option>
+                <option value="Good (Normal wear / Minor scratches)">Good (Normal wear / Minor scratches)</option>
+                <option value="Fair (Needs minor servicing)">Fair (Needs minor servicing)</option>
+                <option value="Restoration / Project condition">Restoration / Project condition</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Vehicle Condition Photos Upload Area (Choose from Gallery or Choose PC Files) -->
+          <div class="bg-obsidian-850 p-4 rounded-2xl border border-white/10">
+            <div class="flex items-center justify-between mb-2">
+              <div>
+                <label class="block text-xs font-bold text-white flex items-center gap-1.5">
+                  <i class="fa-solid fa-camera text-red-500"></i>
+                  <span>Upload Photos of Current Bike Condition</span>
+                </label>
+                <span class="text-[11px] text-zinc-400">Front, Rear, Odometer reading, Left & Right angles</span>
+              </div>
+              <span id="photoSelectedBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-obsidian-750 text-zinc-400 border border-white/5">0 photos</span>
+            </div>
+
+            <!-- Dual Upload Action Buttons -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3 mb-3">
+              <!-- Mobile option: Choose from Gallery / Camera -->
+              <button 
+                type="button" 
+                onclick="triggerGalleryUpload()" 
+                class="py-2.5 px-3 rounded-xl bg-obsidian-750 hover:bg-obsidian-700 active:scale-98 text-white border border-white/10 text-xs font-semibold flex items-center justify-center gap-2 transition"
+              >
+                <i class="fa-solid fa-images text-red-500 text-sm"></i>
+                <span>Choose from Gallery / Camera</span>
+              </button>
+
+              <!-- PC / Computer option: Choose Files / Browse PC -->
+              <button 
+                type="button" 
+                onclick="triggerPcFileUpload()" 
+                class="py-2.5 px-3 rounded-xl bg-obsidian-750 hover:bg-obsidian-700 active:scale-98 text-white border border-white/10 text-xs font-semibold flex items-center justify-center gap-2 transition"
+              >
+                <i class="fa-solid fa-laptop text-zinc-300 text-sm"></i>
+                <span>Choose Files / Browse PC</span>
+              </button>
+            </div>
+
+            <!-- Hidden File Inputs -->
+            <input 
+              type="file" 
+              id="sellGalleryInput" 
+              accept="image/*" 
+              multiple 
+              class="hidden" 
+              onchange="handleSellPhotoUpload(event)" 
+            />
+            <input 
+              type="file" 
+              id="sellPcFileInput" 
+              accept="image/*,.heic,.jpg,.jpeg,.png,.webp" 
+              multiple 
+              class="hidden" 
+              onchange="handleSellPhotoUpload(event)" 
+            />
+
+            <!-- Photo Preview Grid -->
+            <div id="sellPhotoPreviewGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-2 empty:hidden pt-2">
+              <!-- Dynamic image thumbnail cards -->
+            </div>
+
+            <!-- Upload drop hint -->
+            <div id="uploadEmptyHint" class="text-center py-3 border border-dashed border-white/15 rounded-xl text-zinc-400 text-[11px] cursor-pointer hover:border-red-500/50 transition" onclick="triggerPcFileUpload()">
+              <i class="fa-solid fa-cloud-arrow-up text-zinc-500 text-base mb-1 block"></i>
+              <span>Tap buttons above or drop bike photos here</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Additional Details / Upgrades (Optional)</label>
+            <textarea id="sellConditionNotes" rows="2" placeholder="e.g. Single owner, aftermarket exhaust, full service record with authorized dealer..." class="w-full bg-obsidian-850 text-white px-4 py-2.5 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500"></textarea>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold text-xs sm:text-sm tracking-wider uppercase transition shadow-glow-red flex items-center justify-center gap-2">
+            <i class="fa-solid fa-handshake"></i>
+            <span>Submit Valuation & Send via WhatsApp</span>
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL 4: TEST RIDE BOOKING MODAL
+         ========================================== -->
+    <div id="testRideModal" class="fixed inset-0 z-50 hidden overflow-y-auto modal-backdrop flex items-center justify-center p-3 sm:p-6">
+      <div class="relative w-full max-w-lg bg-obsidian-950 border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl my-auto animate-in fade-in zoom-in-95 duration-200">
+        
+        <div class="flex items-start justify-between gap-4 mb-5">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-red-400">Experience the Pure Power</span>
+            <h3 class="text-2xl font-black text-white tracking-tight">Book a Test Ride</h3>
+            <p class="text-xs text-zinc-400">Reserve a private track or showroom test ride with safety briefing.</p>
+          </div>
+          <button onclick="closeTestRideModal()" class="w-8 h-8 rounded-full bg-obsidian-800 text-zinc-400 hover:text-white flex items-center justify-center transition">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form id="testRideForm" onsubmit="handleTestRideSubmit(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Selected Vehicle *</label>
+            <input type="text" id="trBikeName" readonly class="w-full bg-obsidian-800 text-red-400 font-bold px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none cursor-not-allowed" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Full Name *</label>
+              <input type="text" id="trName" required placeholder="Rider's full name" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Mobile (WhatsApp) *</label>
+              <input type="tel" id="trPhone" required pattern="[0-9]{10}" placeholder="10-digit mobile" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Preferred Date *</label>
+              <input type="date" id="trDate" required class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Valid Driving License *</label>
+              <select id="trLicense" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500">
+                <option value="Yes">Yes, MCWG License with me</option>
+                <option value="Applying">Learner / Renewal in progress</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Preferred Showroom Location *</label>
+            <select id="trBranch" class="w-full bg-obsidian-850 text-white px-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500">
+              <option value="Hyderabad - Jubilee Hills">Hyderabad – Jubilee Hills Main Showroom</option>
+              <option value="Hyderabad - Banjara Hills">Hyderabad – Banjara Hills Superbike Lounge</option>
+              <option value="Bengaluru - Indiranagar">Bengaluru – Indiranagar Hub</option>
+              <option value="Mumbai - Andheri West">Mumbai – Andheri West Showroom</option>
+            </select>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold text-xs sm:text-sm tracking-wider uppercase transition shadow-glow-red flex items-center justify-center gap-2">
+            <i class="fa-solid fa-flag-checkered"></i>
+            <span>Confirm Test Ride Reservation</span>
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL 5: MY GARAGE LOOKUP (INVOICES & RECORDS)
+         ========================================== -->
+    <div id="garageModal" class="fixed inset-0 z-50 hidden overflow-y-auto modal-backdrop flex items-center justify-center p-3 sm:p-6">
+      <div class="relative w-full max-w-2xl bg-obsidian-950 border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl my-auto animate-in fade-in zoom-in-95 duration-200">
+        
+        <div class="flex items-start justify-between gap-4 mb-5">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-red-600/15 border border-red-600/30 flex items-center justify-center text-red-500 text-xl shrink-0">
+              <i class="fa-solid fa-warehouse"></i>
+            </div>
+            <div>
+              <span class="text-xs font-mono font-bold uppercase tracking-wider text-red-400">Adarsh Owner Vault</span>
+              <h3 class="text-2xl font-black text-white tracking-tight">My Garage & Invoice Lookup</h3>
+            </div>
+          </div>
+          <button onclick="closeGarageModal()" class="w-8 h-8 rounded-full bg-obsidian-800 text-zinc-400 hover:text-white flex items-center justify-center transition">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <p class="text-xs text-zinc-300 mb-4">
+          Enter your registered 10-digit mobile number to pull your purchased vehicles, digital invoices, warranty status, and service history.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="flex gap-2.5 mb-6">
+          <div class="relative flex-1">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 text-xs">
+              <i class="fa-solid fa-phone text-red-500"></i>
+            </div>
+            <input 
+              type="tel" 
+              id="garagePhoneInput" 
+              placeholder="e.g. 9014540489 (or your 10-digit number)" 
+              pattern="[0-9]{10}"
+              class="w-full bg-obsidian-850 text-white pl-10 pr-4 py-3 rounded-xl border border-white/10 text-xs sm:text-sm focus:outline-none focus:border-red-500 font-mono"
+            />
+          </div>
+          <button onclick="searchGarageRecords()" id="garageSearchBtn" class="px-5 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs sm:text-sm transition flex items-center gap-2 shrink-0 shadow-glow-red">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search</span>
+          </button>
+        </div>
+
+        <!-- Demo Hint -->
+        <div class="text-[11px] text-zinc-400 bg-obsidian-850 p-2.5 rounded-xl border border-white/5 mb-6 flex items-center justify-between">
+          <span><i class="fa-solid fa-circle-info text-amber-500 mr-1.5"></i> Try searching registered test number: <strong class="text-white font-mono">9014540489</strong></span>
+          <button onclick="fillDemoPhone()" class="text-red-400 hover:text-red-300 font-bold underline">Auto Fill</button>
+        </div>
+
+        <!-- Garage Search Results Container -->
+        <div id="garageResultsContainer" class="space-y-4">
+          <!-- Dynamically populated -->
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         NOTIFICATION TOAST
+         ========================================== -->
+    <div id="toastNotification" class="fixed top-20 right-4 z-50 hidden glass-panel border border-red-600/40 p-4 rounded-2xl shadow-glow-red flex items-center gap-3 text-xs sm:text-sm text-white animate-in slide-in-from-top-4 duration-200">
+      <div class="w-7 h-7 rounded-lg bg-red-600 flex items-center justify-center text-white text-xs shrink-0">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <div id="toastMessage">Action completed successfully.</div>
+    </div>
+
+    <!-- ==========================================
+         COMPLETE APPLICATION JAVASCRIPT
+         Supabase Integration, Dynamic Sync & Modals
+         ========================================== -->
+    <script>
+      // 1. SUPABASE CLIENT INITIALIZATION
+      const SUPABASE_URL = "https://nwdgayanhwzxivqlspdd.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53ZGdheWFuaHd6eGl2cWxzcGRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMwMTI0NTYsImV4cCI6MjEwODU4ODQ1Nn0.gGkuKEWZaTwC9xKbKvx_2sLMIY-r8haThicjgK4vP20";
+      
+      let supabaseClient = null;
+      try {
+        if (window.supabase) {
+          supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          console.log("Supabase Client initialized successfully.");
+        }
+      } catch (err) {
+        console.warn("Supabase init error:", err);
+      }
+
+      // Business Contact Numbers
+      const SHOWROOM_PHONE = "+91 9014540489";
+      const SHOWROOM_WHATSAPP = "919014540489";
+
+      // 2. HARDCODED CURATED SAMPLE BIKES (Never Empty Inventory Fallback)
+      const SAMPLE_BIKES = [
+        {
+          id: "bike-1",
+          name: "KAWASAKI NINJA Z900",
+          brand: "Kawasaki",
+          category: "Superbikes",
+          year: 2024,
+          km: "1,456 km",
+          engine: "948 cc Inline-4",
+          hp: "125 hp",
+          price_raw: 920000,
+          price: "₹9,20,000",
+          location: "Hyderabad – Main Showroom",
+          image_url: "/assets/aistudio/image_f4045ab9.png",
+          badge: "PRE-OWNED",
+          fuel: "Petrol",
+          acceleration: "3.4s",
+          tagline: "Raw inline-4 symphony with Sugomi attitude.",
+          addon_name: "KTM / Kawasaki Racing Jacket",
+          addon_price: "₹16,500"
+        },
+        {
+          id: "bike-2",
+          name: "BMW S1000RR M-SPORT",
+          brand: "BMW",
+          category: "Superbikes",
+          year: 2024,
+          km: "3,200 km",
+          engine: "999 cc ShiftCam",
+          hp: "205 hp",
+          price_raw: 2350000,
+          price: "₹23,50,000",
+          location: "Hyderabad – Banjara Hills",
+          image_url: "/assets/aistudio/image_f406ab38.png",
+          badge: "PRE-OWNED",
+          fuel: "Petrol",
+          acceleration: "2.9s",
+          tagline: "Track weapon with aerodynamic carbon winglets.",
+          addon_name: "BMW M Carbon Helmet",
+          addon_price: "₹42,000"
+        },
+        {
+          id: "bike-3",
+          name: "DUCATI DIAVEL V4",
+          brand: "Ducati",
+          category: "Superbikes",
+          year: 2024,
+          km: "1,112 km",
+          engine: "V4 1158 cc Granturismo",
+          hp: "168 hp",
+          price_raw: 2890000,
+          price: "₹28,90,000",
+          location: "Hyderabad – Main Showroom",
+          image_url: "/assets/aistudio/image_f406ab38.png",
+          badge: "PRE-OWNED",
+          fuel: "Petrol",
+          acceleration: "3.1s",
+          tagline: "Muscular stance with superbike heart.",
+          addon_name: "Ducati Corse Riding Leather",
+          addon_price: "₹38,500"
+        },
+        {
+          id: "bike-4",
+          name: "KTM 1290 SUPER DUKE R",
+          brand: "KTM",
+          category: "Superbikes",
+          year: 2023,
+          km: "1,845 km",
+          engine: "1301 cc LC8 V-Twin",
+          hp: "180 hp",
+          price_raw: 1850000,
+          price: "₹18,50,000",
+          location: "Bengaluru Branch",
+          image_url: "/assets/aistudio/image_5a6010cd.png",
+          badge: "PRE-OWNED",
+          fuel: "Petrol",
+          acceleration: "3.1s",
+          tagline: "The Beast. The ultimate hyper-naked machine.",
+          addon_name: "KTM PowerWear Jacket",
+          addon_price: "₹18,500"
+        },
+        {
+          id: "bike-5",
+          name: "HONDA ACTIVA 6G PREMIUM",
+          brand: "Honda",
+          category: "Scooters",
+          year: 2023,
+          km: "5,000 km",
+          engine: "110 cc eSP HET",
+          hp: "7.8 hp",
+          price_raw: 85000,
+          price: "₹85,000",
+          location: "Hyderabad – Main Showroom",
+          image_url: "/assets/aistudio/image_f4045ab9.png",
+          badge: "PRE-OWNED",
+          fuel: "Petrol",
+          acceleration: "7.2s",
+          tagline: "India's highest reliability daily commuter.",
+          addon_name: "Studds Urban Shield Helmet",
+          addon_price: "₹2,200"
+        },
+        {
+          id: "bike-6",
+          name: "KAWASAKI NINJA ZX-10R",
+          brand: "Kawasaki",
+          category: "Superbikes",
+          year: 2023,
+          km: "4,100 km",
+          engine: "998 cc WSBK Spec",
+          hp: "203 hp",
+          price_raw: 1680000,
+          price: "₹16,80,000",
+          location: "Mumbai Branch",
+          image_url: "/assets/aistudio/image_f4045ab9.png",
+          badge: "PRE-OWNED",
+          fuel: "Petrol",
+          acceleration: "2.8s",
+          tagline: "Multiple World Superbike Championship winner.",
+          addon_name: "Akrapovic Full Titanium Decat",
+          addon_price: "₹85,000"
+        },
+        {
+          id: "bike-7",
+          name: "ROYAL ENFIELD CONTINENTAL GT 650",
+          brand: "Royal Enfield",
+          category: "Mid-Range",
+          year: 2023,
+          km: "6,200 km",
+          engine: "648 cc Parallel Twin",
+          hp: "47 hp",
+          price_raw: 345000,
+          price: "₹3,45,000",
+          location: "Hyderabad – Banjara Hills",
+          image_url: "/assets/aistudio/image_f4045ab9.png",
+          badge: "PRE-OWNED",
+          fuel: "Petrol",
+          acceleration: "5.8s",
+          tagline: "Authentic cafe racer with clip-on handlebars.",
+          addon_name: "Royal Enfield Leather Gloves",
+          addon_price: "₹4,500"
+        },
+        {
+          id: "bike-8",
+          name: "DAINESE MISANO 2 D-AIR RACE SUIT",
+          brand: "Dainese",
+          category: "Accessories",
+          year: 2024,
+          km: "Brand New",
+          engine: "Airbag Tech",
+          hp: "Level 2 Armor",
+          price_raw: 145000,
+          price: "₹1,45,000",
+          location: "Hyderabad & Pan-India Dispatch",
+          image_url: "/assets/aistudio/image_5a6010cd.png",
+          badge: "NEW",
+          fuel: "N/A",
+          acceleration: "0.04s deploy",
+          tagline: "MotoGP certified wireless intelligent airbag suit.",
+          addon_name: "AGV Pista GP RR Carbon Helmet",
+          addon_price: "₹95,000"
+        }
+      ];
+
+      // Active Showroom Branches
+      const SAMPLE_BRANCHES = [
+        {
+          id: "hyd-main",
+          name: "Hyderabad – Main Superbike Showroom",
+          city: "Hyderabad",
+          address: "Plot 48, Road No. 36, Jubilee Hills, Hyderabad, Telangana 500033",
+          timings: "Mon – Sun: 10:00 AM – 8:30 PM (Air-conditioned valet lounge)",
+          maps_query: "Adarsh+Motors+Jubilee+Hills+Hyderabad"
+        },
+        {
+          id: "hyd-banjara",
+          name: "Hyderabad – Banjara Hills Superbike Lounge",
+          city: "Hyderabad",
+          address: "Road No. 12, MLA Colony, Banjara Hills, Hyderabad, Telangana 500034",
+          timings: "Mon – Sun: 10:30 AM – 8:00 PM",
+          maps_query: "Adarsh+Motors+Banjara+Hills+Hyderabad"
+        },
+        {
+          id: "blr-hub",
+          name: "Bengaluru – Indiranagar Experience Centre",
+          city: "Bengaluru",
+          address: "100 Feet Road, HAL 2nd Stage, Indiranagar, Bengaluru, Karnataka 560038",
+          timings: "Mon – Sun: 10:00 AM – 9:00 PM",
+          maps_query: "Adarsh+Motors+Indiranagar+Bengaluru"
+        },
+        {
+          id: "mum-west",
+          name: "Mumbai – Andheri West Showroom",
+          city: "Mumbai",
+          address: "New Link Road, Next to Lotus Petrol Pump, Andheri West, Mumbai, MH 400053",
+          timings: "Mon – Sun: 10:00 AM – 8:30 PM",
+          maps_query: "Adarsh+Motors+Andheri+West+Mumbai"
+        }
+      ];
+
+      // Sample Demo Invoices for My Garage
+      const SAMPLE_GARAGE_RECORDS = {
+        "9014540489": {
+          owner: "Kanna Pavan",
+          phone: "9014540489",
+          vehicle: "Kawasaki Ninja Z900 (Special Edition)",
+          reg_no: "TS 09 EG 7744",
+          vin: "JKAZR900PPA092144",
+          invoice_id: "INV-2024-ADM-8492",
+          delivery_date: "14 January 2024",
+          warranty: "Active · 2-Year Engine & RSA Protection (Valid till Jan 2026)",
+          last_service: "First 1,000 KM Inspection Completed on 22 Feb 2024",
+          next_service: "6,000 KM Periodic Maintenance due in 1,200 KM",
+          service_advisor: "Vikram Reddy (+91 9014540489)"
+        },
+        "9876543210": {
+          owner: "Rajesh Kumar",
+          phone: "9876543210",
+          vehicle: "Ducati Diavel V4 (Rosso Corsa)",
+          reg_no: "TS 10 AB 1234",
+          vin: "ZDM14BKW7PB018241",
+          invoice_id: "INV-2024-ADM-6102",
+          delivery_date: "05 March 2024",
+          warranty: "Active · 24 Months Ducati Ever Red Warranty",
+          last_service: "Pre-Delivery Inspection & Run-in check",
+          next_service: "Annual Desmo Service at 15,000 KM",
+          service_advisor: "Sandeep Rao (+91 9014540489)"
+        }
+      };
+
+      // State Management
+      let allBikes = [...SAMPLE_BIKES];
+      let filteredBikes = [...SAMPLE_BIKES];
+      let currentCategory = "all";
+      let currentBrand = "all";
+      let currentModalBike = null;
+      let activeBranchIndex = 0;
+      let currentPhotoIndex = 1;
+      let isAddonSelected = false;
+
+      // 3. INITIALIZATION
+      document.addEventListener("DOMContentLoaded", async () => {
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+        renderBranchTabs();
+        updateActiveBranchView();
+
+        // Fetch Live Data from Supabase
+        await fetchLiveBikes();
+        await fetchLiveBranches();
+        await fetchLiveSiteSettings();
+
+        // Render initial catalogue
+        applyFilters();
+      });
+
+      // 4. SUPABASE DATA FETCHING
+      async function fetchLiveBikes() {
+        const syncIcon = document.getElementById("syncIcon");
+        if (syncIcon) syncIcon.classList.add("fa-spin");
+
+        try {
+          if (supabaseClient) {
+            const { data, error } = await supabaseClient.from("bikes").select("*");
+            if (!error && data && data.length > 0) {
+              console.log("Loaded bikes from Supabase:", data);
+              allBikes = data;
+              showToast("Synced live inventory from Supabase.");
+            } else {
+              console.log("Supabase 'bikes' table empty or not yet configured. Using verified showroom fleet.");
+              allBikes = [...SAMPLE_BIKES];
+            }
+          }
+        } catch (e) {
+          console.warn("Supabase fetch fallback:", e);
+          allBikes = [...SAMPLE_BIKES];
+        } finally {
+          if (syncIcon) syncIcon.classList.remove("fa-spin");
+        }
+      }
+
+      async function fetchLiveBranches() {
+        try {
+          if (supabaseClient) {
+            const { data, error } = await supabaseClient.from("branches").select("*");
+            if (!error && data && data.length > 0) {
+              SAMPLE_BRANCHES.length = 0;
+              SAMPLE_BRANCHES.push(...data);
+              renderBranchTabs();
+              updateActiveBranchView();
+            }
+          }
+        } catch (e) {
+          console.warn("Branches fetch fallback:", e);
+        }
+      }
+
+      async function fetchLiveSiteSettings() {
+        try {
+          if (supabaseClient) {
+            const { data, error } = await supabaseClient.from("site_settings").select("*");
+            if (!error && data && data.length > 0) {
+              const settings = data[0];
+              if (settings.phone) {
+                document.getElementById("headerCallBtn").href = `tel:${settings.phone}`;
+                document.getElementById("branchCallBtn").href = `tel:${settings.phone}`;
+              }
+              if (settings.instagram) {
+                document.getElementById("instagramLink").href = settings.instagram;
+              }
+            }
+          }
+        } catch (e) {
+          console.warn("Site settings fallback:", e);
+        }
+      }
+
+      async function refreshCatalogue() {
+        await fetchLiveBikes();
+        applyFilters();
+      }
+
+      // 5. ZERO-LATENCY CATALOGUE FILTERING
+      function setCategoryFilter(category) {
+        currentCategory = category;
+        
+        // Update tab buttons appearance
+        const buttons = document.querySelectorAll("#categoryButtonsContainer .cat-btn");
+        buttons.forEach(btn => {
+          if (btn.getAttribute("data-cat") === category) {
+            btn.className = "cat-btn px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap bg-red-600 text-white shadow-glow-red shrink-0";
+          } else {
+            btn.className = "cat-btn px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all whitespace-nowrap bg-transparent text-zinc-400 hover:text-white hover:bg-white/5 shrink-0";
+          }
+        });
+
+        applyFilters();
+      }
+
+      function applyFilters() {
+        const brandSelect = document.getElementById("brandFilterSelect");
+        if (brandSelect) {
+          currentBrand = brandSelect.value;
+        }
+
+        filteredBikes = allBikes.filter(bike => {
+          const matchCat = (currentCategory === "all") || 
+            (bike.category === currentCategory) || 
+            (currentCategory === "Accessories" && (bike.category === "Gear" || bike.category === "Accessories"));
+          const matchBrand = (currentBrand === "all") || (bike.brand.toLowerCase() === currentBrand.toLowerCase());
+          return matchCat && matchBrand;
+        });
+
+        // Update counts
+        const elListings = document.getElementById("statListingsCount");
+        const elInStock = document.getElementById("statInStockCount");
+        if (elListings) elListings.textContent = allBikes.length;
+        if (elInStock) elInStock.textContent = allBikes.length;
+        if (document.getElementById("statTotalNumber")) document.getElementById("statTotalNumber").textContent = allBikes.length;
+        if (document.getElementById("statStockNumber")) document.getElementById("statStockNumber").textContent = filteredBikes.length;
+        if (document.getElementById("viewingLabel")) document.getElementById("viewingLabel").textContent = currentCategory === "all" ? (currentBrand === "all" ? "All vehicles" : currentBrand) : currentCategory;
+
+        renderCatalogueGrid();
+      }
+
+      function resetFilters() {
+        currentCategory = "all";
+        currentBrand = "all";
+        document.getElementById("brandFilterSelect").value = "all";
+        setCategoryFilter("all");
+      }
+
+      // 6. RENDER CATALOGUE GRID (STRICT 2-COL MOBILE, 4-COL DESKTOP)
+      function renderCatalogueGrid() {
+        const grid = document.getElementById("bikeCatalogueGrid");
+        const emptyState = document.getElementById("emptyCatalogueState");
+
+        if (!grid) return;
+
+        if (filteredBikes.length === 0) {
+          grid.innerHTML = "";
+          emptyState.classList.remove("hidden");
+          return;
+        }
+
+        emptyState.classList.add("hidden");
+        
+        grid.innerHTML = filteredBikes.map(bike => {
+          return `
+            <div onclick="openBikeModal('${bike.id}')" class="group relative bg-[#11151F] border border-white/10 hover:border-red-600/50 active:scale-[0.98] rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between shadow-lg cursor-pointer hover:-translate-y-1 hover:shadow-glow-red/20">
+              
+              <!-- Athletic Wide Ratio Showcase (Never stretched, fits mobile & desktop cleanly) -->
+              <div class="relative w-full aspect-[16/10] overflow-hidden bg-black/70">
+                <!-- Badges over image -->
+                <div class="absolute top-1.5 left-1.5 z-10 flex items-center gap-1">
+                  <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-black/80 text-red-400 border border-red-500/30 backdrop-blur-md">
+                    ${bike.badge || "VERIFIED"}
+                  </span>
+                </div>
+                <div class="absolute top-1.5 right-1.5 z-10">
+                  <span class="text-[8px] sm:text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/80 text-zinc-300 border border-white/10 backdrop-blur-md">
+                    ${bike.year || "2024"}
+                  </span>
+                </div>
+
+                <img 
+                  src="${bike.image_url}" 
+                  alt="${bike.name}" 
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                  onerror="this.onerror=null; this.src='/assets/aistudio/image_f4045ab9.png';"
+                />
+
+                <div class="absolute inset-0 bg-gradient-to-t from-[#11151F] via-transparent to-transparent opacity-75"></div>
+              </div>
+
+              <!-- Card Body: Clean, High-End, Zero Redundancy -->
+              <div class="p-2 sm:p-3 flex flex-col flex-grow justify-between">
+                <div>
+                  <div class="text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-red-500 truncate mb-0.5">
+                    ${bike.brand}
+                  </div>
+                  <h3 class="text-xs sm:text-sm font-black text-white leading-tight uppercase truncate group-hover:text-red-400 transition-colors">
+                    ${bike.name}
+                  </h3>
+
+                  <!-- Single-Line Technical Spec Bar -->
+                  <div class="flex items-center gap-1.5 text-[9px] sm:text-[10px] text-zinc-400 font-mono mt-1 truncate">
+                    <span>${bike.km}</span>
+                    <span class="text-zinc-600">·</span>
+                    <span class="truncate">${bike.hp || bike.engine}</span>
+                  </div>
+                </div>
+
+                <!-- Price & Verification Bar -->
+                <div class="mt-2.5 pt-2 border-t border-white/5 flex items-baseline justify-between gap-1">
+                  <div>
+                    <span class="text-[8px] sm:text-[9px] uppercase tracking-wider text-zinc-400 font-bold block">Offer Price</span>
+                    <span class="text-xs sm:text-sm lg:text-base font-black text-white font-mono tabular-nums tracking-tight">${bike.price}</span>
+                  </div>
+                  <span class="text-[8px] sm:text-[9px] font-bold text-emerald-400 font-mono bg-emerald-950/60 border border-emerald-800/40 px-1.5 py-0.5 rounded tracking-wide">VERIFIED</span>
+                </div>
+
+                <!-- Clean, Proportional Action Buttons (Full-width on mobile, split on desktop) -->
+                <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  <button type="button" onclick="event.stopPropagation(); openBikeModal('${bike.id}')" class="hidden sm:inline-flex py-1.5 px-2 rounded-lg bg-obsidian-800 hover:bg-obsidian-750 text-zinc-200 font-semibold text-xs border border-white/10 transition items-center justify-center gap-1 active:scale-95">
+                    <i class="fa-solid fa-circle-info text-[10px] text-zinc-400"></i>
+                    <span>Specs</span>
+                  </button>
+                  <button type="button" onclick="event.stopPropagation(); enquireBikeWhatsApp('${bike.name}')" class="w-full py-1.5 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-[11px] sm:text-xs transition shadow-[0_2px_10px_rgba(16,185,129,0.35)] flex items-center justify-center gap-1.5" title="Enquire on WhatsApp">
+                    <i class="fa-brands fa-whatsapp text-sm text-white"></i>
+                    <span>WhatsApp</span>
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+          `;
+        }).join("");
+      }
+
+      // 7. BIKE DETAILS MODAL
+      function openBikeModal(bikeId, pushHistory = true) {
+        const bike = allBikes.find(b => b.id === bikeId) || SAMPLE_BIKES[0];
+        currentModalBike = bike;
+        currentPhotoIndex = 1;
+
+        document.getElementById("modalCategoryBadge").textContent = bike.category;
+        document.getElementById("modalBikeTitle").innerHTML = `${bike.name.replace(bike.brand, '')} <span class="text-red-500">${bike.brand}</span>`;
+        document.getElementById("modalBikeTagline").textContent = bike.tagline || "Precision engineered supersport performance.";
+        document.getElementById("modalBikePrice").textContent = bike.price;
+        document.getElementById("modalBikeImage").src = bike.image_url;
+
+        // Specs badges
+        document.getElementById("specFuel").textContent = bike.fuel || "Petrol";
+        document.getElementById("specYear").textContent = bike.year || "2024";
+        document.getElementById("specHP").textContent = bike.hp || "180 hp";
+        document.getElementById("specKM").textContent = bike.km || "1,845 km";
+        document.getElementById("specAcceleration").textContent = bike.acceleration || "3.1s";
+        document.getElementById("specEngine").textContent = bike.engine || "1000 cc";
+
+        document.getElementById("photoAngleIndicator").textContent = "Angle 1 of 3";
+
+        document.getElementById("bikeDetailsModal").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+
+        // Push history state so mobile back button returns directly to the collection
+        if (pushHistory) {
+          try {
+            history.pushState({ modalOpen: 'bikeDetails', bikeId: bike.id }, '');
+          } catch (err) {}
+        }
+      }
+
+      function closeBikeModal(triggerBack = true) {
+        const modal = document.getElementById("bikeDetailsModal");
+        if (modal) modal.classList.add("hidden");
+        document.body.style.overflow = "auto";
+
+        if (triggerBack && history.state && history.state.modalOpen === 'bikeDetails') {
+          history.back();
+        }
+      }
+
+      // Automatically return to previously viewed section when user presses browser/mobile Back button
+      window.addEventListener("popstate", (e) => {
+        const bikeModal = document.getElementById("bikeDetailsModal");
+        if (bikeModal && !bikeModal.classList.contains("hidden")) {
+          closeBikeModal(false);
+        }
+      });
+
+      function prevBikePhoto() {
+        currentPhotoIndex = currentPhotoIndex === 1 ? 3 : currentPhotoIndex - 1;
+        updateModalPhoto();
+      }
+
+      function nextBikePhoto() {
+        currentPhotoIndex = currentPhotoIndex === 3 ? 1 : currentPhotoIndex + 1;
+        updateModalPhoto();
+      }
+
+      function updateModalPhoto() {
+        document.getElementById("photoAngleIndicator").textContent = `Angle ${currentPhotoIndex} of 3`;
+        const img = document.getElementById("modalBikeImage");
+        if (img) {
+          img.style.opacity = "0.7";
+          setTimeout(() => {
+            img.style.opacity = "1";
+          }, 150);
+        }
+      }
+
+      function openTestRideModalFromDetails() {
+        closeBikeModal(false);
+        openTestRideModal(currentModalBike ? currentModalBike.name : "Superbike");
+      }
+
+      function enquireCurrentBikeWhatsApp() {
+        if (!currentModalBike) return;
+        const text = `Hello Adarsh Motors, I am interested in purchasing the ${currentModalBike.name} (${currentModalBike.year}, Price: ${currentModalBike.price}). Please share available physical walkaround slots and complete inspection report.`;
+        openWhatsApp(text);
+      }
+
+      function enquireBikeWhatsApp(bikeName) {
+        const text = `Hello Adarsh Motors, I am interested in viewing/booking the ${bikeName}. Please share availability, quotation, and inspection details.`;
+        openWhatsApp(text);
+      }
+
+      // 8. SERVICE APPOINTMENT MODAL & SUPABASE SUBMISSION
+      function openServiceModal() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById("srvDate").min = today;
+        document.getElementById("srvDate").value = today;
+        document.getElementById("serviceAppointmentModal").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeServiceModal() {
+        document.getElementById("serviceAppointmentModal").classList.add("hidden");
+        document.body.style.overflow = "auto";
+      }
+
+      async function handleServiceSubmit(e) {
+        e.preventDefault();
+        const name = document.getElementById("srvName").value.trim();
+        const phone = document.getElementById("srvPhone").value.trim();
+        const bike = document.getElementById("srvBike").value.trim();
+        const type = document.getElementById("srvType").value;
+        const date = document.getElementById("srvDate").value;
+        const branch = document.getElementById("srvBranch").value;
+        const notes = document.getElementById("srvNotes").value.trim();
+
+        const leadData = {
+          type: "service_appointment",
+          name,
+          phone,
+          bike_model: bike,
+          service_type: type,
+          preferred_date: date,
+          branch,
+          notes,
+          created_at: new Date().toISOString()
+        };
+
+        // 1. Insert into Supabase 'leads' table
+        try {
+          if (supabaseClient) {
+            const { error } = await supabaseClient.from("leads").insert([leadData]);
+            if (error) console.warn("Supabase lead error:", error);
+          }
+        } catch (err) {
+          console.warn("Supabase lead insertion fallback:", err);
+        }
+
+        // 2. Persist in local storage
+        saveLocalLead(leadData);
+
+        // 3. Close modal & show toast
+        closeServiceModal();
+        showToast("Service Appointment Submitted! Dispatching to WhatsApp...");
+
+        // 4. Pre-fill WhatsApp message & open chat
+        const waMessage = `*New Service Appointment Booking*\n*Name:* ${name}\n*Phone:* ${phone}\n*Two-Wheeler:* ${bike}\n*Service:* ${type}\n*Date:* ${date}\n*Branch:* ${branch}\n*Notes:* ${notes || "None"}`;
+        setTimeout(() => {
+          openWhatsApp(waMessage);
+        }, 600);
+      }
+
+      // 9. SELL YOUR BIKE / GET EXCHANGE VALUE MODAL & PHOTO UPLOAD
+      let sellUploadedPhotos = [];
+
+      function openSellModal() {
+        document.getElementById("sellModal").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeSellModal() {
+        document.getElementById("sellModal").classList.add("hidden");
+        document.body.style.overflow = "auto";
+      }
+
+      function triggerGalleryUpload() {
+        const input = document.getElementById("sellGalleryInput");
+        if (input) input.click();
+      }
+
+      function triggerPcFileUpload() {
+        const input = document.getElementById("sellPcFileInput");
+        if (input) input.click();
+      }
+
+      function handleSellPhotoUpload(e) {
+        const files = Array.from(e.target.files || []);
+        if (!files.length) return;
+
+        files.forEach(file => {
+          if (!file.type.startsWith("image/")) return;
+          const url = URL.createObjectURL(file);
+          sellUploadedPhotos.push({
+            name: file.name,
+            size: (file.size / 1024).toFixed(0) + " KB",
+            url: url
+          });
+        });
+
+        renderSellPhotoPreviews();
+        e.target.value = ""; // reset input so same file can be chosen again if needed
+      }
+
+      function removeSellPhoto(index) {
+        if (sellUploadedPhotos[index] && sellUploadedPhotos[index].url) {
+          URL.revokeObjectURL(sellUploadedPhotos[index].url);
+        }
+        sellUploadedPhotos.splice(index, 1);
+        renderSellPhotoPreviews();
+      }
+
+      function renderSellPhotoPreviews() {
+        const grid = document.getElementById("sellPhotoPreviewGrid");
+        const badge = document.getElementById("photoSelectedBadge");
+        const hint = document.getElementById("uploadEmptyHint");
+
+        if (!grid || !badge) return;
+
+        badge.textContent = `${sellUploadedPhotos.length} photo${sellUploadedPhotos.length === 1 ? '' : 's'}`;
+
+        if (sellUploadedPhotos.length > 0) {
+          if (hint) hint.classList.add("hidden");
+          grid.innerHTML = sellUploadedPhotos.map((photo, idx) => `
+            <div class="relative group rounded-xl overflow-hidden aspect-square bg-obsidian-950 border border-white/10 shadow-sm">
+              <img src="${photo.url}" alt="${photo.name}" class="w-full h-full object-cover" />
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <button type="button" onclick="removeSellPhoto(${idx})" class="w-7 h-7 rounded-full bg-red-600 text-white flex items-center justify-center text-xs shadow-glow-red hover:bg-red-700 transition" title="Remove photo">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+              <span class="absolute bottom-1 left-1 bg-black/75 text-[9px] font-mono px-1.5 py-0.5 rounded text-zinc-300 pointer-events-none truncate max-w-[85%]">
+                Photo ${idx + 1}
+              </span>
+            </div>
+          `).join("");
+        } else {
+          grid.innerHTML = "";
+          if (hint) hint.classList.remove("hidden");
+        }
+      }
+
+      async function handleSellSubmit(e) {
+        e.preventDefault();
+        const name = document.getElementById("sellName").value.trim();
+        const phone = document.getElementById("sellPhone").value.trim();
+        const bike = document.getElementById("sellBikeModel").value.trim();
+        const year = document.getElementById("sellYear").value.trim();
+        const km = document.getElementById("sellKM").value.trim();
+        const expectedPrice = document.getElementById("sellExpectedPrice").value.trim();
+        const condition = document.getElementById("sellCurrentCondition") ? document.getElementById("sellCurrentCondition").value : "Very Good";
+        const notes = document.getElementById("sellConditionNotes") ? document.getElementById("sellConditionNotes").value.trim() : "";
+        const photoCount = sellUploadedPhotos.length;
+
+        const leadData = {
+          type: "sell_or_exchange_valuation",
+          name,
+          phone,
+          bike_model: bike,
+          year,
+          km,
+          expected_price: expectedPrice,
+          condition,
+          photos_count: photoCount,
+          notes,
+          created_at: new Date().toISOString()
+        };
+
+        // 1. Insert into Supabase 'leads' table
+        try {
+          if (supabaseClient) {
+            const { error } = await supabaseClient.from("leads").insert([leadData]);
+            if (error) console.warn("Supabase lead error:", error);
+          }
+        } catch (err) {
+          console.warn("Supabase lead insertion fallback:", err);
+        }
+
+        // 2. Persist in local storage
+        saveLocalLead(leadData);
+
+        // 3. Close modal & show toast
+        closeSellModal();
+        showToast("Valuation Details Received! Opening WhatsApp to share quotation & photos...");
+
+        // 4. Pre-fill WhatsApp message & open chat
+        let waMessage = `*Sell Your Bike / Exchange Value Request*\n*Owner Name:* ${name}\n*Phone:* ${phone}\n*Vehicle:* ${bike} (${year})\n*Total KM:* ${km} km\n*Expected Value:* ${expectedPrice}\n*Current Condition:* ${condition}\n*Photos Attached:* ${photoCount > 0 ? `${photoCount} bike photos selected (sharing photos in this chat)` : 'Will share photos in chat'}\n*Notes / Upgrades:* ${notes || "None"}`;
+
+        setTimeout(() => {
+          openWhatsApp(waMessage);
+        }, 600);
+      }
+
+      // 10. TEST RIDE MODAL & SUPABASE SUBMISSION
+      function openTestRideModal(bikeName) {
+        document.getElementById("trBikeName").value = bikeName || "Superbike Model";
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById("trDate").min = today;
+        document.getElementById("trDate").value = today;
+        document.getElementById("testRideModal").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeTestRideModal() {
+        document.getElementById("testRideModal").classList.add("hidden");
+        document.body.style.overflow = "auto";
+      }
+
+      async function handleTestRideSubmit(e) {
+        e.preventDefault();
+        const bike = document.getElementById("trBikeName").value;
+        const name = document.getElementById("trName").value.trim();
+        const phone = document.getElementById("trPhone").value.trim();
+        const date = document.getElementById("trDate").value;
+        const license = document.getElementById("trLicense").value;
+        const branch = document.getElementById("trBranch").value;
+
+        const leadData = {
+          type: "test_ride_booking",
+          name,
+          phone,
+          bike_model: bike,
+          preferred_date: date,
+          license_status: license,
+          branch,
+          created_at: new Date().toISOString()
+        };
+
+        // 1. Insert into Supabase 'leads' table
+        try {
+          if (supabaseClient) {
+            const { error } = await supabaseClient.from("leads").insert([leadData]);
+            if (error) console.warn("Supabase test ride lead error:", error);
+          }
+        } catch (err) {
+          console.warn("Supabase test ride lead fallback:", err);
+        }
+
+        // 2. Persist in local storage
+        saveLocalLead(leadData);
+
+        // 3. Close modal & show toast
+        closeTestRideModal();
+        showToast("Test Ride Confirmed! Connecting with Sales Desk...");
+
+        // 4. Pre-fill WhatsApp message
+        const waMessage = `*Test Ride Reservation Request*\n*Rider:* ${name}\n*Phone:* ${phone}\n*Vehicle:* ${bike}\n*Preferred Date:* ${date}\n*Branch:* ${branch}\n*Driving License:* ${license}`;
+        setTimeout(() => {
+          openWhatsApp(waMessage);
+        }, 600);
+      }
+
+      // 11. MY GARAGE LOOKUP (INVOICES & VEHICLE RECORDS)
+      function openGarageModal() {
+        document.getElementById("garageModal").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+        const results = document.getElementById("garageResultsContainer");
+        if (!results.innerHTML.trim()) {
+          // Default prompt
+          results.innerHTML = `
+            <div class="text-center py-8 text-zinc-400 glass-card rounded-2xl border border-white/5 p-4">
+              <i class="fa-solid fa-id-card-clip text-3xl text-zinc-500 mb-2"></i>
+              <div class="text-xs">Search with your phone number to view vehicle registration, invoice, and warranty documents.</div>
+            </div>
+          `;
+        }
+      }
+
+      function closeGarageModal() {
+        document.getElementById("garageModal").classList.add("hidden");
+        document.body.style.overflow = "auto";
+      }
+
+      function fillDemoPhone() {
+        document.getElementById("garagePhoneInput").value = "9014540489";
+        searchGarageRecords();
+      }
+
+      async function searchGarageRecords() {
+        const phone = document.getElementById("garagePhoneInput").value.trim();
+        const results = document.getElementById("garageResultsContainer");
+        const btn = document.getElementById("garageSearchBtn");
+
+        if (!phone || phone.length < 10) {
+          showToast("Please enter a valid 10-digit mobile number.");
+          return;
+        }
+
+        btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Finding...`;
+
+        let record = null;
+
+        // 1. Try querying Supabase 'invoices' table
+        try {
+          if (supabaseClient) {
+            const { data, error } = await supabaseClient.from("invoices").select("*").eq("phone", phone);
+            if (!error && data && data.length > 0) {
+              record = data[0];
+            }
+          }
+        } catch (e) {
+          console.warn("Garage query error:", e);
+        }
+
+        // 2. Check demo records if Supabase table is not populated
+        if (!record && SAMPLE_GARAGE_RECORDS[phone]) {
+          record = SAMPLE_GARAGE_RECORDS[phone];
+        }
+
+        btn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> Search`;
+
+        if (record) {
+          results.innerHTML = `
+            <div class="glass-panel rounded-2xl p-5 border border-red-600/30 shadow-glow-red animate-in fade-in duration-300">
+              <div class="flex items-start justify-between gap-3 mb-3 border-b border-white/10 pb-3">
+                <div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 rounded">
+                    Verified Vehicle Record
+                  </span>
+                  <h4 class="text-base sm:text-lg font-black text-white mt-1">${record.vehicle}</h4>
+                  <div class="text-xs text-zinc-300 font-mono">Owner: ${record.owner} (${record.phone})</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs font-mono font-bold text-red-400">${record.invoice_id}</div>
+                  <div class="text-[10px] text-zinc-400">${record.delivery_date}</div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 text-xs mb-3.5">
+                <div class="bg-obsidian-850 p-2.5 rounded-xl border border-white/5">
+                  <div class="text-[10px] text-zinc-400">Reg. Number:</div>
+                  <div class="font-bold text-white font-mono">${record.reg_no}</div>
+                </div>
+                <div class="bg-obsidian-850 p-2.5 rounded-xl border border-white/5">
+                  <div class="text-[10px] text-zinc-400">Chassis / VIN:</div>
+                  <div class="font-bold text-white font-mono truncate">${record.vin}</div>
+                </div>
+              </div>
+
+              <div class="bg-obsidian-850 p-3 rounded-xl border border-white/5 text-xs space-y-1.5 mb-4">
+                <div class="flex items-center gap-2 text-emerald-400">
+                  <i class="fa-solid fa-shield-halved text-xs"></i>
+                  <span class="font-bold">${record.warranty}</span>
+                </div>
+                <div class="text-zinc-300"><strong class="text-white">Service Log:</strong> ${record.last_service}</div>
+                <div class="text-red-400"><strong class="text-white">Next Inspection:</strong> ${record.next_service}</div>
+              </div>
+
+              <div class="flex items-center gap-2.5">
+                <button onclick="bookServiceForMyBike('${record.vehicle}')" class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition text-center shadow-glow-red">
+                  <i class="fa-solid fa-wrench mr-1"></i> Book Next Service
+                </button>
+                <a href="https://wa.me/${SHOWROOM_WHATSAPP}?text=Hello%20Adarsh%20Motors,%20I%20am%20${encodeURIComponent(record.owner)}.%20Please%20send%20a%20PDF%20copy%20of%20my%20invoice%20${record.invoice_id}" target="_blank" rel="noopener noreferrer" class="py-2.5 px-3.5 rounded-xl bg-obsidian-800 hover:bg-obsidian-750 text-zinc-200 border border-white/10 text-xs font-semibold transition">
+                  <i class="fa-solid fa-file-invoice mr-1 text-red-400"></i> Request PDF
+                </a>
+              </div>
+            </div>
+          `;
+        } else {
+          results.innerHTML = `
+            <div class="text-center py-6 glass-card rounded-2xl border border-white/10 p-4">
+              <i class="fa-solid fa-file-circle-question text-3xl text-zinc-500 mb-2"></i>
+              <h5 class="text-sm font-bold text-white mb-1">No Vehicle Record Found for ${phone}</h5>
+              <p class="text-xs text-zinc-400 max-w-sm mx-auto mb-4">
+                If you recently acquired your machine from our showroom, your records are being registered into the central ledger. Contact support directly:
+              </p>
+              <a href="https://wa.me/${SHOWROOM_WHATSAPP}?text=Hi%20Adarsh%20Motors,%20could%20you%20please%20help%20me%20link%20my%20vehicle%20invoice%20for%20mobile%20${phone}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition">
+                <i class="fa-brands fa-whatsapp"></i> Chat with Relationship Manager
+              </a>
+            </div>
+          `;
+        }
+      }
+
+      function bookServiceForMyBike(bikeName) {
+        closeGarageModal();
+        openServiceModal();
+        document.getElementById("srvBike").value = bikeName;
+      }
+
+      // 12. BRANCHES & SHOWROOM LOCATIONS
+      function renderBranchTabs() {
+        const container = document.getElementById("branchTabsContainer");
+        if (!container) return;
+
+        container.innerHTML = SAMPLE_BRANCHES.map((b, idx) => {
+          const isActive = idx === activeBranchIndex;
+          const cls = isActive
+            ? "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-red-600 text-white shadow-glow-red transition whitespace-nowrap"
+            : "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-obsidian-850 hover:bg-obsidian-800 text-zinc-400 hover:text-white border border-white/5 transition whitespace-nowrap";
+          return `
+            <button onclick="selectBranch(${idx})" class="${cls}">
+              ${b.city}: ${b.name.split('–')[1] ? b.name.split('–')[1].trim() : b.name}
+            </button>
+          `;
+        }).join("");
+      }
+
+      function selectBranch(idx) {
+        activeBranchIndex = idx;
+        renderBranchTabs();
+        updateActiveBranchView();
+      }
+
+      function updateActiveBranchView() {
+        const branch = SAMPLE_BRANCHES[activeBranchIndex] || SAMPLE_BRANCHES[0];
+        document.getElementById("branchName").textContent = branch.name;
+        document.getElementById("branchAddress").textContent = branch.address;
+        document.getElementById("branchTimings").innerHTML = `<i class="fa-regular fa-clock text-red-400"></i> <span>${branch.timings}</span>`;
+        document.getElementById("branchMapsBtn").href = `https://maps.google.com/?q=${branch.maps_query}`;
+      }
+
+      // 13. WHATSAPP & LOCAL STORAGE HELPERS
+      function openWhatsApp(message) {
+        const url = `https://wa.me/${SHOWROOM_WHATSAPP}?text=${encodeURIComponent(message)}`;
+        window.open(url, "_blank");
+      }
+
+      function saveLocalLead(lead) {
+        try {
+          const existing = JSON.parse(localStorage.getItem("adarsh_leads") || "[]");
+          existing.push(lead);
+          localStorage.setItem("adarsh_leads", JSON.stringify(existing));
+        } catch (e) {
+          console.warn("localStorage error:", e);
+        }
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById("toastNotification");
+        const msgEl = document.getElementById("toastMessage");
+        if (!toast || !msgEl) return;
+        msgEl.textContent = msg;
+        toast.classList.remove("hidden");
+        setTimeout(() => {
+          toast.classList.add("hidden");
+        }, 4000);
+      }
+
+      // 14. NAVIGATION CONTROLLER & SCROLL SPY (OPTIMIZED FOR LAPTOP & MOBILE)
+      function toggleMobileMenu() {
+        const menu = document.getElementById("mobileNavMenu");
+        const icon = document.getElementById("mobileMenuIcon");
+        if (!menu) return;
+        const isHidden = menu.classList.contains("hidden");
+        if (isHidden) {
+          menu.classList.remove("hidden");
+          if (icon) {
+            icon.classList.remove("fa-bars");
+            icon.classList.add("fa-xmark");
+          }
+        } else {
+          closeMobileMenu();
+        }
+      }
+
+      function closeMobileMenu() {
+        const menu = document.getElementById("mobileNavMenu");
+        const icon = document.getElementById("mobileMenuIcon");
+        if (menu) menu.classList.add("hidden");
+        if (icon) {
+          icon.classList.remove("fa-xmark");
+          icon.classList.add("fa-bars");
+        }
+      }
+
+      window.addEventListener("resize", () => {
+        if (window.innerWidth >= 768) {
+          closeMobileMenu();
+        }
+      });
+
+      function updateActiveNavHighlight(activeId) {
+        // Desktop Navbar Links
+        document.querySelectorAll(".desktop-nav-link").forEach(link => {
+          const navTarget = link.getAttribute("data-nav");
+          if (navTarget === activeId) {
+            link.className = "desktop-nav-link px-3 py-1.5 rounded-full text-white bg-red-600/20 text-red-400 border border-red-500/30 transition-all duration-200 flex items-center gap-1.5 font-semibold";
+            if (!link.querySelector(".nav-dot")) {
+              const dot = document.createElement("span");
+              dot.className = "nav-dot w-1.5 h-1.5 rounded-full bg-red-500";
+              link.prepend(dot);
+            }
+          } else {
+            link.className = "desktop-nav-link px-3 py-1.5 rounded-full text-zinc-300 hover:text-white hover:bg-white/5 border border-transparent transition-all duration-200 flex items-center gap-1.5 font-medium";
+            const dot = link.querySelector(".nav-dot");
+            if (dot) dot.remove();
+          }
+        });
+
+        // Mobile Dropdown Links
+        document.querySelectorAll(".mobile-nav-link").forEach(link => {
+          const navTarget = link.getAttribute("data-mobnav");
+          if (navTarget === activeId) {
+            link.className = "mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-white bg-red-600/15 border border-red-500/30 transition";
+          } else {
+            link.className = "mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 border border-transparent transition";
+          }
+        });
+
+        // Mobile Bottom Nav Items
+        document.querySelectorAll(".bot-nav-item[data-botnav]").forEach(item => {
+          const navTarget = item.getAttribute("data-botnav");
+          if (navTarget === activeId) {
+            item.classList.remove("text-zinc-400");
+            item.classList.add("text-red-500");
+            const label = item.querySelector("span");
+            if (label) label.className = "text-[10px] font-bold mt-0.5 text-red-500";
+          } else {
+            item.classList.remove("text-red-500");
+            item.classList.add("text-zinc-400");
+            const label = item.querySelector("span");
+            if (label) label.className = "text-[10px] font-medium mt-0.5 text-zinc-400";
+          }
+        });
+      }
+
+      function initScrollSpy() {
+        const sections = ["collection", "service", "sell", "showroom"];
+        let ticking = false;
+
+        function onScroll() {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              const scrollPos = window.scrollY + 140;
+              let currentSection = sections[0];
+
+              for (const id of sections) {
+                const el = document.getElementById(id);
+                if (el) {
+                  const top = el.offsetTop;
+                  if (scrollPos >= top) {
+                    currentSection = id;
+                  }
+                }
+              }
+
+              updateActiveNavHighlight(currentSection);
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initScrollSpy();
+      });
+    </script>
+
+  </body>
+</html>
